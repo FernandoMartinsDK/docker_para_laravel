@@ -1,0 +1,84 @@
+# docker-compose.yml
+version: "3.8"
+services:
+
+  nginx:
+    container_name: nginx
+    build: ./docker/nginx
+    command: nginx -g "daemon off;"
+    restart: unless-stopped
+    tty: true
+    links:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - ./src:/var/www/html/projeto
+    networks:
+      - app-network
+
+  php:
+    container_name: php
+    restart: unless-stopped
+    tty: true
+    build: ./docker/php
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./src:/var/www/html/projeto
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    working_dir: /var/www/html/projeto
+    networks:
+      - app-network
+  
+  mysql:
+    image: mysql:latest
+    container_name: setup-mysql
+    restart: always
+    tty: true
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+      MYSQL_DATABASE: empresa
+      MYSQL_USER: administrator
+    ports:
+      # MYSQL_PASSWORD: 123456789
+      - "3306:3306"
+    volumes:
+      - setup-data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+  
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    links:
+      - mysql
+    environment:
+      PMA_HOST: setup-mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - 8085:80
+    networks:
+      - app-network
+  
+  redis:
+    container_name: setup-redis
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
+    ports:
+      - '6379:6379'
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  setup-data:
+    driver: local
