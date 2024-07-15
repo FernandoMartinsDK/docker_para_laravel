@@ -23,7 +23,10 @@ Esse projeto tem como intenssão apenas fornecer uma base simples rodar o seu pr
 
         docker-compose build
         docker-compose up -d
+Caso já tenha instalado anteriormente esse docker force a recriação deles
 
+
+        docker-compose up -d --force-recreate --build
 -  Quando precisar executar comandos do php, composer ou do artisan, é possivel entrar no container pelo comando:
 >docker exec -it php bash
 - Caso o projeto seja novo execute os seguintes comandos caso necessário
