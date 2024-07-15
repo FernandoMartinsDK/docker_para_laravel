@@ -33,7 +33,7 @@ services:
       - app-network
   
   mysql:
-    image: mysql:latest
+    image: mysql:8.3.0
     container_name: setup-mysql
     restart: always
     tty: true
