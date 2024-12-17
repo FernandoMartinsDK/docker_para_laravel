@@ -2,7 +2,7 @@
 Esse projeto tem como intenssão apenas fornecer uma base simples rodar o seu projeto Docker de forma fácil e rápida. Seja um projeto simples ou mais complexo que precise de tenants.
 
 ## Stack
-- Mysql - *versão mais atual*
+- Mysql - 8.3
 - Redis - *versão mais atual*
 - phpmyadmin - *versão mais atual*
 - Nginx - *Alpine 1.25.3*
