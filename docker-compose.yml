@@ -24,6 +24,7 @@ services:
     build: ./docker/php
     ports:
       - "9000:9000"
+      - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
     volumes:
       - ./src:/var/www/html/projeto
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
